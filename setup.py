@@ -15,7 +15,9 @@ setup(
     long_description=long_description,
     packages=find_packages(),
     zip_safe=False,
+    include_package_data=True,
     license='MIT',
+    platforms=['POSIX', 'Linux'],
     keywords=['process', 'management', 'orphan'],
     classifiers=[
         'Development Status :: 1 - Planning',
@@ -31,7 +33,14 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities',
     ],
-    install_requires=[],
+    setup_requires=[
+        'cffi>=1.0.0',
+    ],
+    install_requires=[
+        'cffi>=1.0.0',
+    ],
     extras_require={},
-    platforms=['POSIX', 'Linux'],
+    cffi_modules=[
+        'orphanage/poll_build.py:ffibuilder',
+    ],
 )
