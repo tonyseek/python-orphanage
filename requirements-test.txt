@@ -4,7 +4,6 @@
 #
 #    pip-compile --output-file requirements-test.txt requirements-test.in
 #
--e git+https://github.com/nibrahim/pytest_gcov.git#egg=pytest-gcov
 apipkg==1.4               # via execnet
 attrs==17.4.0             # via pytest
 coverage==4.5.1           # via pytest-cov

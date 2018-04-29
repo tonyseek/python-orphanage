@@ -1,4 +1,4 @@
-.PHONY: help deps test docs
+.PHONY: help deps test docs clean
 
 help:
 	@printf "Commands:\n"
@@ -6,6 +6,7 @@ help:
 	@printf "  deps\tCompiles and locks dependencies.\n"
 	@printf "  test\tRuns test via tox.\n"
 	@printf "  docs\tGenerates documents via tox and sphinx.\n"
+	@printf "  clean\tRemoves all untracked files.\n"
 
 deps:
 	pip-compile --output-file docs/requirements.txt docs/requirements.in
@@ -13,9 +14,11 @@ deps:
 
 test:
 	tox -re "$(shell tox -l | grep -v docs | paste -s -d ',' -)" --skip-missing-interpreters
-	@printf "\nopen tests/htmlcov/index.html\n"
-	@printf "\nopen tests/htmlcov/gcov.html\n"
+	@printf "\nopen tests/htmlcov/index.html tests/htmlcov/c-ext/index.html\n"
 
 docs:
 	tox -e docs
 	@printf "\nopen docs/_build/html/index.html\n"
+
+clean:
+	git clean -fXd --exclude=.tox

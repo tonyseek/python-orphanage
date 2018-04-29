@@ -4,3 +4,4 @@
 *.dylib
 *.gcno
 *.gcda
+*.gcov

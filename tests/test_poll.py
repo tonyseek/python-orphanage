@@ -4,7 +4,15 @@ import os
 import signal
 import time
 
-from orphanage.poll import Context, ffi
+from pytest import fixture
+
+from orphanage.poll import Context, ffi, lib
+
+
+@fixture(autouse=True)
+def gcov_flush():
+    yield
+    lib.__gcov_flush()
 
 
 def test_allocation():

@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+import os
 from pkg_resources import resource_string
 
 from cffi import FFI
@@ -20,6 +21,9 @@ ffibuilder.set_source(
 ffibuilder.cdef(
     ensure_string(resource_string('orphanage', 'poll.h')),
 )
+
+if '--coverage' in os.environ.get('CFLAGS', '').split():
+    ffibuilder.cdef('void __gcov_flush(void);')
 
 
 if __name__ == '__main__':
