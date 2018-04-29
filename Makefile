@@ -12,7 +12,7 @@ deps:
 	pip-compile --output-file requirements-test.txt requirements-test.in
 
 test:
-	tox -e "$(shell tox -l | grep -v docs | paste -s -d ',' -)" --skip-missing-interpreters
+	tox -re "$(shell tox -l | grep -v docs | paste -s -d ',' -)" --skip-missing-interpreters
 	@printf "\nopen tests/htmlcov/index.html\n"
 
 docs:
