@@ -4,11 +4,13 @@
 #
 #    pip-compile --output-file requirements-test.txt requirements-test.in
 #
+-e git+https://github.com/nibrahim/pytest_gcov.git#egg=pytest-gcov
 apipkg==1.4               # via execnet
 attrs==17.4.0             # via pytest
 coverage==4.5.1           # via pytest-cov
 execnet==1.5.0            # via pytest-cache
 funcsigs==1.0.2           # via mock, pytest
+gcovr==3.4
 mock==2.0.0               # via pytest-mock
 more-itertools==4.1.0     # via pytest
 pbr==4.0.2                # via mock

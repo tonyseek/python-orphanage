@@ -2,3 +2,5 @@ pytest
 pytest-cov
 pytest-pep8
 pytest-mock
+-e git+https://github.com/nibrahim/pytest_gcov.git#egg=pytest-gcov
+gcovr

@@ -14,6 +14,7 @@ deps:
 test:
 	tox -re "$(shell tox -l | grep -v docs | paste -s -d ',' -)" --skip-missing-interpreters
 	@printf "\nopen tests/htmlcov/index.html\n"
+	@printf "\nopen tests/htmlcov/gcov.html\n"
 
 docs:
 	tox -e docs

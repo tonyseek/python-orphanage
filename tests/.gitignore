@@ -1,0 +1,6 @@
+*.c
+*.o
+*.so
+*.dylib
+*.gcno
+*.gcda
