@@ -4,9 +4,9 @@ import os
 import signal
 import time
 
-from pytest import fixture
+from pytest import fixture, raises
 
-from orphanage.poll import Context, ffi, lib
+from orphanage.poll import Context, ffi, lib, orphanage_poll_routine_callback
 
 
 @fixture(autouse=True)
@@ -24,10 +24,50 @@ def test_allocation():
     assert ctx.ptr is None
 
 
+def test_allocation_memory_error(mocker):
+    lib = mocker.patch('orphanage.poll.lib', autospec=True)
+    lib.orphanage_poll_create.return_value = ffi.NULL
+    with raises(RuntimeError) as error:
+        Context()
+    error.match('out of memory')
+
+
 def test_polling_smoke():
     ctx = Context()
     assert ctx.start() == 0
     assert ctx.stop() == 0
+
+
+def test_polling_closing_error():
+    ctx = Context()
+    ctx.close()
+
+    with raises(RuntimeError) as error:
+        ctx.start()
+    error.match('has been closed')
+
+    with raises(RuntimeError) as error:
+        ctx.stop()
+    error.match('has been closed')
+
+
+def test_polling_callback_registry(mocker):
+    stub = mocker.stub()
+    stub2 = mocker.stub()
+    ctx = Context([stub])
+    ctx2 = Context([stub2])
+    assert ctx.ptr != ctx2.ptr
+    orphanage_poll_routine_callback(ctx.ptr)
+    stub.assert_called_once_with(ctx)
+    stub2.assert_not_called()
+
+
+def test_polling_callback_registry_fault_tolerance(mocker):
+    stub = mocker.stub()
+    ctx = Context([stub])
+    assert ctx.ptr != ffi.NULL
+    orphanage_poll_routine_callback(ffi.NULL)
+    stub.assert_not_called()
 
 
 def test_polling_callback_unexploded(mocker):

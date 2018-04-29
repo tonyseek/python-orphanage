@@ -26,5 +26,5 @@ if '--coverage' in os.environ.get('CFLAGS', '').split():
     ffibuilder.cdef('void __gcov_flush(void);')
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     ffibuilder.compile(verbose=True)
