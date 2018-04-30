@@ -11,8 +11,10 @@ from orphanage.poll import Context, ffi, lib, orphanage_poll_routine_callback
 
 @fixture(autouse=True)
 def gcov_flush():
-    yield
-    lib.__gcov_flush()
+    try:
+        yield lib.__gcov_flush
+    finally:
+        lib.__gcov_flush()
 
 
 def test_allocation():
@@ -78,7 +80,7 @@ def test_polling_callback_unexploded(mocker):
     assert ctx.stop() == 0
 
 
-def test_polling_callback_exploded():
+def test_polling_callback_exploded(gcov_flush):
     pipe_r, pipe_w = os.pipe()
     child_pid = os.fork()
 
@@ -89,7 +91,11 @@ def test_polling_callback_exploded():
         if grandchild_pid == 0:
             # grandchild process
             os.close(pipe_r)
-            ctx = Context([lambda ctx: os.write(pipe_w, b'called')])
+            ctx = Context([
+                lambda ctx: os.write(pipe_w, b'called'),
+                lambda ctx: gcov_flush(),
+                lambda ctx: os.close(pipe_w),  # EOF to end the test
+            ])
             assert ctx.start() == 0
             os.write(pipe_w, b'did_not_call_yet')
             signal.pause()
@@ -105,12 +111,13 @@ def test_polling_callback_exploded():
             assert os.read(pipe_r, 1024) == b'did_not_call_yet'
 
             time.sleep(1)  # suspend for waiting the pthread
-            os.kill(child_pid, signal.SIGQUIT)
+            os.kill(child_pid, signal.SIGTERM)
             os.waitpid(child_pid, 0)
             assert os.read(pipe_r, 1024) == b'called'
+            assert os.read(pipe_r, 1024) == b''  # EOF
         finally:
             try:
-                os.killpg(child_pid, signal.SIGQUIT)
+                os.killpg(child_pid, signal.SIGTERM)
                 os.waitpid(child_pid, 0)
             except OSError:
                 pass
