@@ -1,8 +1,12 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
 #include <errno.h>
+
+// Copy this to the Python modules since any modification
+const int ORPHANAGE_POLL_OK = 0x00000000;
+const int ORPHANAGE_POLL_PT_CREATE_ERROR = 0x00000001;
+const int ORPHANAGE_POLL_PT_DETACH_ERROR = 0x00000002;
 
 // It seems that the CFFI disallows to include local header files (for now).
 typedef struct orphanage_poll_t {
@@ -41,11 +45,10 @@ int orphanage_poll_start(orphanage_poll_t *t) {
 
     retval = pthread_create(&t->pt, NULL, &orphanage_poll_routine, (void *) t);
     if (retval) {
-        perror("orphanage_poll_start/pthread_create");
-        return retval;
+        return ORPHANAGE_POLL_PT_CREATE_ERROR;
     }
 
-    return 0;
+    return ORPHANAGE_POLL_OK;
 }
 
 int orphanage_poll_stop(orphanage_poll_t *t) {
@@ -56,12 +59,11 @@ int orphanage_poll_stop(orphanage_poll_t *t) {
     if (retval && errno == ESRCH) {
         retval = pthread_detach(t->pt);
         if (retval && errno != ESRCH) {
-            perror("orphanage_poll_stop/pthread_detach");
             errno = last_errno;
-            return retval;
+            return ORPHANAGE_POLL_PT_DETACH_ERROR;
         }
     }
     errno = last_errno;
 
-    return 0;
+    return ORPHANAGE_POLL_OK;
 }

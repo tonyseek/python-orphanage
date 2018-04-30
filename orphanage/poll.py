@@ -1,8 +1,15 @@
 from __future__ import absolute_import
 
+from errno import errorcode
 from weakref import WeakValueDictionary
 
 from _orphanage_poll import ffi, lib
+
+
+# Copied from "poll.c" only
+ORPHANAGE_POLL_OK = 0x00000000
+ORPHANAGE_POLL_PT_CREATE_ERROR = 0x00000001
+ORPHANAGE_POLL_PT_DETACH_ERROR = 0x00000002
 
 
 callback_registry = WeakValueDictionary()
@@ -14,6 +21,23 @@ def orphanage_poll_routine_callback(ptr):
     if ctx is None:
         return
     ctx.trigger_callbacks()
+
+
+def perror(description):
+    errno = ffi.errno
+    errname = errorcode.get(errno, str(errno))
+    return RuntimeError('{0}: errno = {1}'.format(description, errname))
+
+
+def raise_for_return_value(return_value):
+    if return_value == ORPHANAGE_POLL_OK:
+        return
+    elif return_value == ORPHANAGE_POLL_PT_CREATE_ERROR:
+        raise perror('pthread_create')
+    elif return_value == ORPHANAGE_POLL_PT_DETACH_ERROR:
+        raise perror('pthread_detach')
+    else:
+        raise perror('unknown')
 
 
 class Context(object):
@@ -36,11 +60,13 @@ class Context(object):
 
     def start(self):
         self._started()
-        return lib.orphanage_poll_start(self.ptr)
+        r = lib.orphanage_poll_start(self.ptr)
+        raise_for_return_value(r)
 
     def stop(self):
         self._started()
-        return lib.orphanage_poll_stop(self.ptr)
+        r = lib.orphanage_poll_stop(self.ptr)
+        raise_for_return_value(r)
 
     def trigger_callbacks(self):
         for callback in self.callbacks:
