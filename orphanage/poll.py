@@ -19,8 +19,9 @@ callback_registry = WeakValueDictionary()
 def orphanage_poll_routine_callback(ptr):
     ctx = callback_registry.get(ptr)
     if ctx is None:
-        return
+        return 1
     ctx.trigger_callbacks()
+    return 0
 
 
 def perror(description):
