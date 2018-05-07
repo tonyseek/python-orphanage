@@ -40,6 +40,29 @@ worker processes.
 We want to perform this ``ppid`` polling in a real kernel thread. That is the
 intent of this library.
 
+
+Principle
+---------
+
+This library spawns an internal thread to poll the ``ppid`` at regular
+intervals (for now it is one second). Once the ``ppid`` changed, the original
+parent process should be dead and the current process should be orphaned. The
+internal thread will send ``SIGTERM`` to the current process.
+
+In the plan, the ``prctl`` & ``SIGHUP`` pattern may be introduced in Linux
+platforms to avoid from creating threads. For now, the only supported strategy
+is the ``ppid`` polling, for being portable.
+
+
+Alternatives
+------------
+
+CaoE_ is an alternative to this library which developed by the Douban Inc. It
+uses ``prctl`` and a twice-forking pattern. It has a pure Python implementation
+without any C extension compiling requirement. If you don't mind to twist the
+process tree, that will be a good choice too.
+
+
 Contributing
 ------------
 
@@ -49,4 +72,5 @@ issues on GitHub_.
 Of course, pull requests are always welcome.
 
 .. _Gunicorn: https://github.com/benoitc/gunicorn
+.. _CaoE: https://github.com/douban/CaoE
 .. _GitHub: https://github.com/tonyseek/python-orphanage/issues
