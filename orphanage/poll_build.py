@@ -15,11 +15,17 @@ def ensure_string(text):
     return text
 
 
+def yield_macros():
+    if DEBUG:
+        yield ('DEBUG', '')
+
+
 ffibuilder = FFI()
 ffibuilder.set_source(
     '_orphanage_poll',
     ensure_string(resource_string('orphanage', 'poll.c')),
     libraries=['pthread'],
+    define_macros=list(yield_macros()),
 )
 ffibuilder.cdef(
     ensure_string(resource_string('orphanage', 'poll.h')),

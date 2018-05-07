@@ -17,6 +17,9 @@ typedef struct orphanage_poll_t {
     unsigned suicide_instead;
 } orphanage_poll_t;
 int orphanage_poll_routine_callback(orphanage_poll_t *t);
+#ifdef DEBUG
+void __gcov_flush(void);
+#endif
 
 static void *orphanage_poll_routine(void *userdata) {
     pid_t ppid;
