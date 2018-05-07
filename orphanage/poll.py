@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+from logging import getLogger
 from errno import errorcode
 from weakref import WeakValueDictionary
 
@@ -13,6 +14,7 @@ ORPHANAGE_POLL_PT_DETACH_ERROR = 0x00000002
 ORPHANAGE_POLL_PT_CANCEL_ERROR = 0x00000003
 
 
+logger = getLogger(__name__)
 callback_registry = WeakValueDictionary()
 
 
@@ -20,8 +22,11 @@ callback_registry = WeakValueDictionary()
 def orphanage_poll_routine_callback(ptr):
     ctx = callback_registry.get(ptr)
     if ctx is None:
+        logger.debug('Context of %r is not found', ptr)
         return 1
+    logger.debug('Prepare to trigger callbacks on %r', ctx)
     ctx.trigger_callbacks()
+    logger.debug('Finished to trigger callbacks on %r', ctx)
     return 0
 
 
@@ -75,4 +80,10 @@ class Context(object):
 
     def trigger_callbacks(self):
         for callback in self.callbacks:
-            callback(self)
+            logger.debug('triggering callback %r on %r', callback, self)
+            try:
+                callback(self)
+            except Exception:
+                logger.exception('triggering callback')
+            else:
+                logger.debug('triggered callback %r on %r', callback, self)
