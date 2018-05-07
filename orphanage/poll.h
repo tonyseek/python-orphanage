@@ -1,6 +1,6 @@
 typedef struct orphanage_poll_t orphanage_poll_t;
 
-orphanage_poll_t *orphanage_poll_create();
+orphanage_poll_t *orphanage_poll_create(unsigned);
 void orphanage_poll_close(orphanage_poll_t *t);
 
 int orphanage_poll_start(orphanage_poll_t *t);

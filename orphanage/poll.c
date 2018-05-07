@@ -14,6 +14,7 @@ typedef struct orphanage_poll_t {
     pthread_t pt;
     pid_t pid, ppid;
     unsigned started;
+    unsigned suicide_instead;
 } orphanage_poll_t;
 int orphanage_poll_routine_callback(orphanage_poll_t *t);
 
@@ -23,7 +24,11 @@ static void *orphanage_poll_routine(void *userdata) {
     while (1) {
         ppid = getppid();
         if (ppid != t->ppid) {
-            orphanage_poll_routine_callback(t);
+            if (t->suicide_instead) {
+                exit(0);
+            } else {
+                orphanage_poll_routine_callback(t);
+            }
             break;
         }
         pthread_testcancel();
@@ -32,13 +37,14 @@ static void *orphanage_poll_routine(void *userdata) {
     return NULL;
 }
 
-orphanage_poll_t *orphanage_poll_create() {
+orphanage_poll_t *orphanage_poll_create(unsigned suicide_instead) {
     orphanage_poll_t *t = malloc(sizeof(orphanage_poll_t));
     if (t != NULL) {
         t->pt = 0;
         t->pid = getpid();
         t->ppid = getppid();
         t->started = 0;
+        t->suicide_instead = suicide_instead;
     }
     return t;
 }

@@ -45,9 +45,10 @@ def raise_for_return_value(return_value):
 
 
 class Context(object):
-    def __init__(self, callbacks=None):
+    def __init__(self, callbacks=None, suicide_instead=False):
         self.callbacks = list(callbacks or [])
-        self.ptr = lib.orphanage_poll_create()
+        self.suicide_instead = suicide_instead
+        self.ptr = lib.orphanage_poll_create(int(suicide_instead))
         if self.ptr == ffi.NULL:
             raise RuntimeError('out of memory')
         callback_registry[self.ptr] = self
