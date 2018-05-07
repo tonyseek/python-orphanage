@@ -12,6 +12,17 @@ Installation
 
 Don't forget to put it in ``setup.py`` / ``requirements.txt``.
 
+
+Usage
+-----
+
+.. code-block:: python
+
+    from orphanage import exit_when_orphaned
+
+    exit_when_orphaned()
+
+
 Motivation
 ----------
 
