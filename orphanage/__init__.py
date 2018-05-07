@@ -12,7 +12,11 @@ _suicide_pid = None
 
 
 def exit_when_orphaned():
-    """Let the current process exit when it was orphaned."""
+    """Let the current process exit when it was orphaned.
+
+    Calling multiple times and calling-and-forking are both safe. But this is
+    not a thread safe function. Never call it concurrently.
+    """
     from orphanage.poll import Context
 
     global _suicide_ctx, _suicide_pid
