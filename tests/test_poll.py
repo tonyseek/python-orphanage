@@ -52,6 +52,8 @@ def test_polling_smoke():
     with contextlib.closing(Context()) as ctx:
         ctx.start()
         ctx.stop()
+    with contextlib.closing(Context()) as ctx:
+        ctx.stop()
 
 
 def test_polling_starting_error(mocked_lib, mocked_ffi):
@@ -140,7 +142,9 @@ def test_polling_callback_exploded(gcov_flush):
             ctx = Context([
                 lambda ctx: os.write(pipe_w, b'called'),
                 lambda ctx: gcov_flush(),
-                lambda ctx: os.close(pipe_w),  # EOF to end the test
+                lambda ctx: ctx.stop(),
+                lambda ctx: ctx.close(),
+                lambda ctx: os._exit(0),  # EOF to end the test
             ])
             ctx.start()
             os.write(pipe_w, b'did_not_call_yet')

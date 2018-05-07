@@ -10,6 +10,7 @@ from _orphanage_poll import ffi, lib
 ORPHANAGE_POLL_OK = 0x00000000
 ORPHANAGE_POLL_PT_CREATE_ERROR = 0x00000001
 ORPHANAGE_POLL_PT_DETACH_ERROR = 0x00000002
+ORPHANAGE_POLL_PT_CANCEL_ERROR = 0x00000003
 
 
 callback_registry = WeakValueDictionary()
@@ -37,6 +38,8 @@ def raise_for_return_value(return_value):
         raise perror('pthread_create')
     elif return_value == ORPHANAGE_POLL_PT_DETACH_ERROR:
         raise perror('pthread_detach')
+    elif return_value == ORPHANAGE_POLL_PT_CANCEL_ERROR:
+        raise perror('pthread_cancel')
     else:
         raise perror('unknown')
 

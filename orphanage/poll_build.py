@@ -6,6 +6,9 @@ from pkg_resources import resource_string
 from cffi import FFI
 
 
+DEBUG = '--coverage' in os.environ.get('CFLAGS', '').split()
+
+
 def ensure_string(text):
     if isinstance(text, bytes):
         return text.decode('utf-8')
@@ -22,9 +25,9 @@ ffibuilder.cdef(
     ensure_string(resource_string('orphanage', 'poll.h')),
 )
 
-if '--coverage' in os.environ.get('CFLAGS', '').split():
+if DEBUG:
     ffibuilder.cdef('void __gcov_flush(void);')
 
 
 if __name__ == '__main__':  # pragma: no cover
-    ffibuilder.compile(verbose=True)
+    ffibuilder.compile(verbose=True, debug=DEBUG)
