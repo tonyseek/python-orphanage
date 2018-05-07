@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 #include <pthread.h>
 #include <errno.h>
 
@@ -28,7 +29,7 @@ static void *orphanage_poll_routine(void *userdata) {
         ppid = getppid();
         if (ppid != t->ppid) {
             if (t->suicide_instead) {
-                exit(0);
+                kill(t->pid, SIGTERM);
             } else {
                 orphanage_poll_routine_callback(t);
             }

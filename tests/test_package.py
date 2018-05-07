@@ -5,6 +5,7 @@ import signal
 import select
 
 from pkg_resources import get_distribution
+from pytest_cov.embed import init as init_cov, cleanup as cleanup_cov
 
 from orphanage import __version__ as orphanage_version, exit_when_orphaned
 
@@ -12,6 +13,13 @@ from orphanage import __version__ as orphanage_version, exit_when_orphaned
 def test_distribution():
     distribution = get_distribution('orphanage')
     assert distribution.version == orphanage_version
+
+
+def test_suicide_prepare(mocker):
+    ctx = mocker.patch('orphanage.poll.Context', autospec=True)
+    exit_when_orphaned()
+    exit_when_orphaned()
+    ctx.assert_called_once()
 
 
 def test_suicide():
@@ -24,7 +32,9 @@ def test_suicide():
         if spawnee_pid == 0:
             # spawnee process
             os.close(pipe_r)
+            init_cov()
             exit_when_orphaned()
+            cleanup_cov()
             os.write(pipe_w, b'ready')
             signal.pause()
         else:

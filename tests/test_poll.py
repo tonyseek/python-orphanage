@@ -9,17 +9,9 @@ import errno
 from pytest import fixture, raises
 
 from orphanage.poll import (
-    Context, ffi, lib, orphanage_poll_routine_callback,
+    Context, ffi, orphanage_poll_routine_callback,
     ORPHANAGE_POLL_OK, ORPHANAGE_POLL_PT_CREATE_ERROR,
-    ORPHANAGE_POLL_PT_DETACH_ERROR)
-
-
-@fixture(autouse=True)
-def gcov_flush():
-    try:
-        yield lib.__gcov_flush
-    finally:
-        lib.__gcov_flush()
+    ORPHANAGE_POLL_PT_CANCEL_ERROR, ORPHANAGE_POLL_PT_DETACH_ERROR)
 
 
 @fixture
@@ -81,6 +73,13 @@ def test_polling_stopping_error(mocked_lib, mocked_ffi):
         ctx.stop()
     error.match('pthread_detach: errno = -65535')
 
+    mocked_lib.orphanage_poll_stop.return_value = \
+        ORPHANAGE_POLL_PT_CANCEL_ERROR
+    mocked_ffi.errno = errno.EINVAL
+    with raises(RuntimeError) as error, contextlib.closing(Context()) as ctx:
+        ctx.stop()
+    error.match('pthread_cancel: errno = EINVAL')
+
     mocked_lib.orphanage_poll_stop.return_value = -1
     mocked_ffi.errno = errno.EINVAL
     with raises(RuntimeError) as error, contextlib.closing(Context()) as ctx:
@@ -126,6 +125,18 @@ def test_polling_callback_unexploded(mocker):
         ctx.start()
         stub.assert_not_called()
         ctx.stop()
+
+
+def test_polling_callback_exception_tolerance(mocker):
+    stub1 = mocker.stub()
+    stub1.side_effect = ValueError()
+    stub2 = mocker.stub()
+    with contextlib.closing(Context([stub1, stub2])) as ctx:
+        ctx.trigger_callbacks()
+        stub1.assert_called_once_with(ctx)
+        stub2.assert_called_once_with(ctx)
+    with raises(ValueError):
+        stub1()  # It is truly fiery
 
 
 def test_polling_callback_exploded(gcov_flush):
