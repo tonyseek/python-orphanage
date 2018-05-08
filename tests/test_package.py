@@ -19,7 +19,7 @@ def test_suicide_prepare(mocker):
     ctx = mocker.patch('orphanage.poll.Context', autospec=True)
     exit_when_orphaned()
     exit_when_orphaned()
-    ctx.assert_called_once()
+    ctx.assert_called_once_with(suicide_instead=True)
 
 
 def test_suicide():
