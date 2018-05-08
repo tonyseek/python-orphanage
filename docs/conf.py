@@ -66,7 +66,8 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = [u'_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = [u'_build', u'Thumbs.db', u'.DS_Store', u'.gitignore',
+                    u'Makefile']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -88,8 +89,10 @@ html_theme_options = {
     'description': 'Let orphan processes suicide',
     'github_user': 'tonyseek',
     'github_repo': 'python-orphanage',
+    'github_type': 'star',
+    'github_count': True,
+    'github_banner': 'github-ribbons.png',
     'github_button': True,
-    'github_banner': True,
     'travis_button': True,
 }
 
