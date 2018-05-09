@@ -1,3 +1,5 @@
+|Build Status| |Coverage Status| |PyPI Version|
+
 orphanage
 =========
 
@@ -74,3 +76,13 @@ Of course, pull requests are always welcome.
 .. _Gunicorn: https://github.com/benoitc/gunicorn
 .. _CaoE: https://github.com/douban/CaoE
 .. _GitHub: https://github.com/tonyseek/python-orphanage/issues
+
+.. |Build Status| image:: https://travis-ci.org/tonyseek/python-orphanage.svg?branch=master
+   :target: https://travis-ci.org/tonyseek/python-orphanage
+   :alt: Build Status
+.. |Coverage Status| image:: https://coveralls.io/repos/github/tonyseek/python-orphanage/badge.svg?branch=master
+   :target: https://coveralls.io/github/tonyseek/python-orphanage?branch=master
+   :alt: Coverage Status
+.. |PyPI Version| image:: https://img.shields.io/pypi/v/orphanage.svg
+   :target: https://pypi.org/project/orphanage/
+   :alt: PyPI Version

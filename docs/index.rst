@@ -1,12 +1,19 @@
 Document of orphanage
 =====================
 
-.. include:: ../README.rst
-   :start-line: 3
+Overview
+--------
 
-.. include:: ./development.rst
+.. include:: ../README.rst
+   :start-line: 5
+
+
+Table of Content
+----------------
 
 .. toctree::
-   :hidden:
+   :maxdepth: 2
 
    index
+   development
+   api
