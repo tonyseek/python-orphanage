@@ -21,7 +21,7 @@ setup(
     platforms=['POSIX', 'Linux'],
     keywords=['process', 'management', 'orphan'],
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: MIT License',
