@@ -1,5 +1,5 @@
-Development
------------
+Development Guide
+-----------------
 
 There is a ``Makefile`` for development in local environment.
 See available commands via invoking ``make help``.
