@@ -150,14 +150,20 @@ def test_polling_callback_exploded(gcov_flush):
         if grandchild_pid == 0:
             # grandchild process
             os.close(pipe_r)
+
             ctx = Context([
                 lambda ctx: os.write(pipe_w, b'called'),
-                lambda ctx: gcov_flush(),
-                lambda ctx: ctx.stop(),
-                lambda ctx: ctx.close(),
-                lambda ctx: os._exit(0),  # EOF to end the test
+                lambda ctx: os.kill(os.getpid(), signal.SIGTERM),
             ])
             ctx.start()
+
+            def term(signum, frame):
+                ctx.stop()
+                ctx.close()
+                gcov_flush()
+
+            signal.signal(signal.SIGTERM, term)
+
             os.write(pipe_w, b'did_not_call_yet')
             signal.pause()
         else:
