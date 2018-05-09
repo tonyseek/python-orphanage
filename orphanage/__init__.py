@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import os
 
 
-__version__ = '0.0.0'
+__version__ = '0.1.0'
 __all__ = ['exit_when_orphaned']
 
 

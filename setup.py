@@ -8,7 +8,7 @@ with open('README.rst') as readme:
 
 setup(
     name='orphanage',
-    version='0.0.0',
+    version='0.1.0',
     url='https://github.com/tonyseek/python-orphanage',
     author='Jiangge Zhang',
     author_email='tonyseek@gmail.com',
