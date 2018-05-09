@@ -18,6 +18,7 @@ pluggy==0.6.0             # via pytest
 py==1.5.3                 # via pytest
 pytest-cache==1.0         # via pytest-pep8
 pytest-cov==2.5.1
+pytest-forked==0.2
 pytest-mock==1.9.0
 pytest-pep8==1.0.6
 pytest==3.5.1

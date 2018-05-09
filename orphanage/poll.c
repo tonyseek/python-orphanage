@@ -58,15 +58,13 @@ void orphanage_poll_close(orphanage_poll_t *t) {
 }
 
 int orphanage_poll_start(orphanage_poll_t *t) {
-    int retval;
-
-    retval = pthread_create(&t->pt, NULL, &orphanage_poll_routine, (void *) t);
-    if (retval) {
+    errno = pthread_create(&t->pt, NULL, &orphanage_poll_routine, (void *) t);
+    if (errno) {
         return ORPHANAGE_POLL_PT_CREATE_ERROR;
     }
 
-    retval = pthread_detach(t->pt);
-    if (retval) {
+    errno = pthread_detach(t->pt);
+    if (errno) {
         return ORPHANAGE_POLL_PT_DETACH_ERROR;
     }
 
@@ -76,14 +74,12 @@ int orphanage_poll_start(orphanage_poll_t *t) {
 }
 
 int orphanage_poll_stop(orphanage_poll_t *t) {
-    int retval;
-
     if (!t->started) {
         return ORPHANAGE_POLL_OK;
     }
 
-    retval = pthread_cancel(t->pt);
-    if (retval && errno != ESRCH) {
+    errno = pthread_cancel(t->pt);
+    if (errno && errno != ESRCH) {
         return ORPHANAGE_POLL_PT_CANCEL_ERROR;
     }
 

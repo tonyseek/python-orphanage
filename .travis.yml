@@ -1,9 +1,22 @@
 language: python
-sudo: false
 python:
+  # pypy2.7 is broken (https://github.com/travis-ci/travis-ci/issues/8103#issuecomment-387327744)
   - "2.7"
   - "3.6"
-  - "pypy2.7"
   - "pypy3.5"
-install: pip install tox-travis
-script: tox
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y lcov
+install:
+  - pip install tox-travis coveralls coveralls-merge
+  - gem install coveralls-lcov
+script:
+  - tox -- -v
+after_success:
+  - cd tests
+  - lcov --capture -d $PWD -b $PWD --output-file coverage.info
+  - coveralls-lcov -v -n coverage.info > coverage.c.json
+  - coveralls-merge coverage.c.json
+branches:
+  only:
+    - master
