@@ -2,12 +2,13 @@ from setuptools import setup, find_packages
 
 
 with open('README.rst') as readme:
+    next(readme)  # Skip badges
     long_description = ''.join(readme).strip()
 
 
 setup(
     name='orphanage',
-    version='0.0.0',
+    version='0.1.0',
     url='https://github.com/tonyseek/python-orphanage',
     author='Jiangge Zhang',
     author_email='tonyseek@gmail.com',
@@ -20,7 +21,7 @@ setup(
     platforms=['POSIX', 'Linux'],
     keywords=['process', 'management', 'orphan'],
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: MIT License',
