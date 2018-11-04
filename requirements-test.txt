@@ -4,22 +4,27 @@
 #
 #    pip-compile --output-file requirements-test.txt requirements-test.in
 #
-apipkg==1.4               # via execnet
-attrs==17.4.0             # via pytest
+apipkg==1.5               # via execnet
+atomicwrites==1.2.1       # via pytest
+attrs==18.2.0             # via pytest
 coverage==4.5.1           # via pytest-cov
 execnet==1.5.0            # via pytest-cache
 funcsigs==1.0.2           # via mock, pytest
-gcovr==3.4
+gcovr==4.1
+jinja2==2.10              # via gcovr
+markupsafe==1.0           # via jinja2
 mock==2.0.0               # via pytest-mock
-more-itertools==4.1.0     # via pytest
-pbr==4.0.2                # via mock
+more-itertools==4.3.0     # via pytest
+pathlib2==2.3.2           # via pytest
+pbr==5.1.0                # via mock
 pep8==1.7.1               # via pytest-pep8
-pluggy==0.6.0             # via pytest
-py==1.5.3                 # via pytest
+pluggy==0.8.0             # via pytest
+py==1.7.0                 # via pytest
 pytest-cache==1.0         # via pytest-pep8
-pytest-cov==2.5.1
+pytest-cov==2.6.0
 pytest-forked==0.2
-pytest-mock==1.9.0
+pytest-mock==1.10.0
 pytest-pep8==1.0.6
-pytest==3.5.1
-six==1.11.0               # via mock, more-itertools, pytest
+pytest==3.9.3
+scandir==1.9.0            # via pathlib2
+six==1.11.0               # via mock, more-itertools, pathlib2, pytest
