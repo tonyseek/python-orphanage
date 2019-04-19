@@ -11,7 +11,7 @@ coverage==4.5.1           # via pytest-cov
 execnet==1.5.0            # via pytest-cache
 funcsigs==1.0.2           # via mock, pytest
 gcovr==4.1
-jinja2==2.10              # via gcovr
+jinja2==2.10.1
 markupsafe==1.0           # via jinja2
 mock==2.0.0               # via pytest-mock
 more-itertools==4.3.0     # via pytest

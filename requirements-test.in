@@ -4,3 +4,5 @@ pytest-pep8
 pytest-mock
 pytest-forked
 gcovr
+
+jinja2>=2.10.1  # CVE-2016-10745 and CVE-2019-10906
