@@ -4,27 +4,65 @@
 #
 #    pip-compile --output-file requirements-test.txt requirements-test.in
 #
-apipkg==1.5               # via execnet
-atomicwrites==1.2.1       # via pytest
-attrs==18.2.0             # via pytest
-coverage==4.5.1           # via pytest-cov
-execnet==1.5.0            # via pytest-cache
-funcsigs==1.0.2           # via mock, pytest
+apipkg==1.5
+    # via execnet
+atomicwrites==1.2.1
+    # via pytest
+attrs==18.2.0
+    # via pytest
+coverage==4.5.1
+    # via pytest-cov
+execnet==1.5.0
+    # via pytest-cache
+funcsigs==1.0.2
+    # via
+    #   mock
+    #   pytest
 gcovr==4.1
-jinja2==2.10.1
-markupsafe==1.0           # via jinja2
-mock==2.0.0               # via pytest-mock
-more-itertools==4.3.0     # via pytest
-pathlib2==2.3.2           # via pytest
-pbr==5.1.0                # via mock
-pep8==1.7.1               # via pytest-pep8
-pluggy==0.8.0             # via pytest
-py==1.7.0                 # via pytest
-pytest-cache==1.0         # via pytest-pep8
+    # via -r requirements-test.in
+jinja2==2.11.3
+    # via
+    #   -r requirements-test.in
+    #   gcovr
+markupsafe==1.0
+    # via jinja2
+mock==2.0.0
+    # via pytest-mock
+more-itertools==4.3.0
+    # via pytest
+pathlib2==2.3.2
+    # via pytest
+pbr==5.1.0
+    # via mock
+pep8==1.7.1
+    # via pytest-pep8
+pluggy==0.8.0
+    # via pytest
+py==1.7.0
+    # via pytest
+pytest-cache==1.0
+    # via pytest-pep8
 pytest-cov==2.6.0
+    # via -r requirements-test.in
 pytest-forked==0.2
+    # via -r requirements-test.in
 pytest-mock==1.10.0
+    # via -r requirements-test.in
 pytest-pep8==1.0.6
+    # via -r requirements-test.in
 pytest==3.9.3
-scandir==1.9.0            # via pathlib2
-six==1.11.0               # via mock, more-itertools, pathlib2, pytest
+    # via
+    #   -r requirements-test.in
+    #   pytest-cache
+    #   pytest-cov
+    #   pytest-forked
+    #   pytest-mock
+    #   pytest-pep8
+scandir==1.9.0
+    # via pathlib2
+six==1.11.0
+    # via
+    #   mock
+    #   more-itertools
+    #   pathlib2
+    #   pytest
